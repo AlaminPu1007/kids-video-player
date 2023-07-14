@@ -9,28 +9,33 @@
  * @created_at :- 09/07/2023 21:02:09
  */
 
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import RootStackNav from './src/navigation/stackNavigation/RootStackNav';
+import {NavigationContainer} from '@react-navigation/native';
 
 const App = () => {
-  return (
-    <View>
-      <Text>App</Text>
-    </View>
-  );
+    return (
+        <SafeAreaProvider>
+            <NavigationContainer>
+                <RootStackNav />
+            </NavigationContainer>
+        </SafeAreaProvider>
+    );
 };
 
 export default () => {
-  return (
-    <GestureHandlerRootView style={styles.container}>
-      <App />
-    </GestureHandlerRootView>
-  );
+    return (
+        <GestureHandlerRootView style={styles.container}>
+            <App />
+        </GestureHandlerRootView>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+    container: {
+        flex: 1,
+    },
 });

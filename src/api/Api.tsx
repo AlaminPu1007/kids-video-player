@@ -3,9 +3,11 @@
  * we can call our route at any where with token
  */
 import axios from 'axios';
+//@ts-ignore
+import {API_URL} from '@env';
 
 const instance = axios.create({
-    baseURL: 'https://restcountries.com/v3.1',
+    baseURL: API_URL,
 });
 
 export default instance;
