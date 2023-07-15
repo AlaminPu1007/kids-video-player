@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
-import YoutubePlayer from 'react-native-youtube-iframe';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
 import axios from 'axios';
 //@ts-ignore
 import {API_URL} from '@env';
+import VideoContainer from './homeComponent/VideoContainer';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const HomeComponent = () => {
-    const [playing] = useState(false);
     const [data, setData] = useState<any>([]);
     const [loading, setLoading] = useState<Boolean>(true);
 
@@ -47,32 +47,21 @@ const HomeComponent = () => {
     }
 
     return (
-        <View>
-            {data?.length
-                ? data.map(
-                      (item: {
-                          link: string,
-                          id: React.Key | null | undefined,
-                      }) => {
-                          const getLink: any = item.link
-                              .split('v=')[1]
-                              .split('&')[0];
-                          return (
-                              <View key={item.id}>
-                                  <YoutubePlayer
-                                      height={300}
-                                      play={playing}
-                                      videoId={getLink}
-                                  />
-                              </View>
-                          );
-                      },
-                  )
-                : null}
-        </View>
+        <SafeAreaView style={styles.container}>
+            <FlatList
+                data={data}
+                renderItem={({item}) => <VideoContainer item={item} />}
+                keyExtractor={item => item.id}
+            />
+        </SafeAreaView>
     );
 };
 
 export default HomeComponent;
 
-// const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        // marginTop: StatusBar.currentHeight || 0,
+    },
+});
