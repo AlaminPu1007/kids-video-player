@@ -1,27 +1,45 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import React, {useState, useRef} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
 import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
+import {calculatePlayerHeight, getVideoId} from '../../../utils/ReusableMethod';
 
 interface Props {
     item: any;
 }
 
 const VideoContainer = ({item}: Props) => {
+    // get video id from url
+    const videoId = getVideoId(item.link);
+    // define state for this component
     const [playing] = useState(false);
-    const videoId = item.link.split('v=')[1].split('&')[0];
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [metaDataOfVideo, setMetaDataOfVideo] = useState<Object>({});
+
     const videoRef = useRef<any>();
 
-    // Calculate the height based on the aspect ratio of the video
-    const calculatePlayerHeight = () => {
-        const aspectRatio = 16 / 9; // Assuming a 16:9 aspect ratio
-        const screenWidth = Dimensions.get('window').width;
-        const playerHeight = screenWidth / aspectRatio;
-        return playerHeight;
-    };
+    // get meta data of video
+    useEffect(() => {
+        let unmount = false;
+        if (!unmount && videoId) {
+            getYoutubeMeta(videoId).then(meta => {
+                setMetaDataOfVideo(meta);
+            });
+        }
 
-    getYoutubeMeta(videoId).then(meta => {
-        console.log(meta);
-    });
+        return () => {
+            unmount = true;
+        };
+    }, [videoId]);
+
+    // if video id is not valid return error
+    if (!videoId) {
+        return (
+            <View>
+                <Text>Invalid video </Text>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>

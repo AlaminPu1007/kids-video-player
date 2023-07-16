@@ -1,7 +1,7 @@
 /**
  *This file help us to get some common styles for all component in out application
  */
-import {ResponsiveFontSize} from './Responsive';
+import {ResponsiveFontSize} from '../utils/Responsive';
 
 export default {
     FONT_SIZE_SMALL: ResponsiveFontSize(12),
