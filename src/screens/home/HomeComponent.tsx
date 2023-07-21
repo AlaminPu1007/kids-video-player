@@ -5,6 +5,7 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import VideoContainer from './homeComponent/VideoContainer';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import CategoriesList from './homeComponent/CategoriesList';
 
 const HomeComponent = () => {
     const [data, setData] = useState<any>([]);
@@ -50,6 +51,7 @@ const HomeComponent = () => {
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={data}
+                ListHeaderComponent={<CategoriesList data={data} />}
                 renderItem={({item}) => <VideoContainer item={item} />}
                 keyExtractor={item => item.id}
             />
