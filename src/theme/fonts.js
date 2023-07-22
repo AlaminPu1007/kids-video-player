@@ -22,7 +22,15 @@ const weight = {
     normal: 'normal',
 };
 
+//Font-family
+const type = {
+    robotoRegular: 'Roboto-Regular', // font-weight: 400
+    robotoBold: 'Roboto-Bold', // font-weight: 700
+    robotoFull: 'Roboto-Black', // font-weight: 900
+};
+
 export default {
     size,
     weight,
+    type,
 };
