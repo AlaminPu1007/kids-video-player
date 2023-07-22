@@ -52,7 +52,9 @@ const HomeComponent = () => {
             <FlatList
                 data={data}
                 ListHeaderComponent={<CategoriesList data={data} />}
-                renderItem={({item}) => <VideoContainer item={item} />}
+                renderItem={({item, index}) => (
+                    <VideoContainer item={item} index={index} />
+                )}
                 keyExtractor={item => item.id}
             />
         </SafeAreaView>

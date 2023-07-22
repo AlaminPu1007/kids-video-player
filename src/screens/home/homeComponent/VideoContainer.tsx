@@ -5,9 +5,10 @@ import {calculatePlayerHeight, getVideoId} from '../../../utils/ReusableMethod';
 
 interface Props {
     item: any;
+    index: number;
 }
 
-const VideoContainer = ({item}: Props) => {
+const VideoContainer = ({item, index}: Props) => {
     // get video id from url
     const videoId = getVideoId(item.link);
     // define state for this component
@@ -42,7 +43,11 @@ const VideoContainer = ({item}: Props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View
+            style={[
+                styles.container,
+                index === 0 ? styles.firstItemStyles : null,
+            ]}>
             <Text style={styles.titleStyle}>{item?.name}</Text>
             <YoutubePlayer
                 height={calculatePlayerHeight()}
@@ -59,15 +64,19 @@ export default VideoContainer;
 
 const styles = StyleSheet.create({
     container: {
-        elevation: 0.5,
-        margin: 10,
+        elevation: 0.3,
+        marginHorizontal: 5,
+        marginBottom: 10,
+    },
+    firstItemStyles: {
+        marginTop: 10,
     },
     webViewContainer: {
         flex: 1,
     },
     titleStyle: {
         fontSize: 25,
-        paddingVertical: 10,
+        // paddingVertical: 10,
         marginLeft: 10,
         color: '#001',
     },
