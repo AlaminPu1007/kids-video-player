@@ -2,6 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
 import {calculatePlayerHeight, getVideoId} from '../../../utils/ReusableMethod';
+import {useTheme} from '@react-navigation/native';
 
 interface Props {
     item: any;
@@ -9,6 +10,10 @@ interface Props {
 }
 
 const VideoContainer = ({item, index}: Props) => {
+    // get colors property form react-navigation theme
+    //  eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {colors} = useTheme();
+
     // get video id from url
     const videoId = getVideoId(item.link);
     // define state for this component
