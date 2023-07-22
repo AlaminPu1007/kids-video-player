@@ -19,6 +19,8 @@ import {
     DefaultTheme,
     DarkTheme,
 } from '@react-navigation/native';
+import {Provider} from 'react-redux';
+import {store} from './src/store/index';
 
 const App = () => {
     const scheme = useColorScheme();
@@ -35,7 +37,9 @@ const App = () => {
 export default () => {
     return (
         <GestureHandlerRootView style={styles.container}>
-            <App />
+            <Provider store={store}>
+                <App />
+            </Provider>
         </GestureHandlerRootView>
     );
 };
