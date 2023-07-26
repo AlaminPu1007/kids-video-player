@@ -6,6 +6,7 @@ import {API_URL} from '@env';
 import VideoContainer from './homeComponent/VideoContainer';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CategoriesList from './homeComponent/CategoriesList';
+import commonStyles from '../../styles/commonStyles';
 
 const HomeComponent = () => {
     const [data, setData] = useState<any>([]);
@@ -41,8 +42,8 @@ const HomeComponent = () => {
 
     if (loading) {
         return (
-            <View>
-                <Text>loading...</Text>
+            <View style={[commonStyles.pageContentCenter]}>
+                <Text style={[commonStyles.mediumTextStyles]}>loading...</Text>
             </View>
         );
     }

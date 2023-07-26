@@ -1,8 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
-import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
-import {calculatePlayerHeight, getVideoId} from '../../../utils/ReusableMethod';
-import {useTheme} from '@react-navigation/native';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {getYoutubeMeta} from 'react-native-youtube-iframe';
+import {getVideoId} from '../../../utils/ReusableMethod';
+// import {useTheme} from '@react-navigation/native';
+import commonStyles from '../../../styles/commonStyles';
+import colors from '../../../theme/colors';
 
 interface Props {
     item: any;
@@ -11,18 +13,16 @@ interface Props {
 
 const VideoContainer = ({item, index}: Props) => {
     // get colors property form react-navigation theme
-    //  eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {colors} = useTheme();
+    // const {colors} = useTheme();
 
     // get video id from url
     const videoId = getVideoId(item.link);
     // define state for this component
-    const [playing] = useState(false);
+    // const [playing] = useState(false);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [metaDataOfVideo, setMetaDataOfVideo] = useState<Object>({});
 
-    const videoRef = useRef<any>();
+    // const videoRef = useRef<any>();
 
     // get meta data of video
     useEffect(() => {
@@ -41,8 +41,10 @@ const VideoContainer = ({item, index}: Props) => {
     // if video id is not valid return error
     if (!videoId) {
         return (
-            <View>
-                <Text>Invalid video </Text>
+            <View style={[commonStyles.pageContentCenter]}>
+                <Text style={[commonStyles.mediumTextStyles]}>
+                    Invalid video
+                </Text>
             </View>
         );
     }
@@ -53,14 +55,32 @@ const VideoContainer = ({item, index}: Props) => {
                 styles.container,
                 index === 0 ? styles.firstItemStyles : null,
             ]}>
-            <Text style={styles.titleStyle}>{item?.name}</Text>
-            <YoutubePlayer
-                height={calculatePlayerHeight()}
+            <View>
+                <Text
+                    style={[commonStyles.mediumTextStyles, styles.titleStyle]}>
+                    {item?.name}
+                </Text>
+            </View>
+            <View style={styles.imageWrapperWidget}>
+                {/* @ts-ignore */}
+                {metaDataOfVideo?.thumbnail_url && (
+                    <Image
+                        source={{
+                            // @ts-ignore
+                            uri: metaDataOfVideo?.thumbnail_url,
+                        }}
+                        style={styles.imageContainer}
+                    />
+                )}
+            </View>
+
+            {/* <YoutubePlayer
+                height={calculatePlayerHeight() - 5}
                 play={playing}
                 videoId={videoId}
                 webViewStyle={styles.webViewContainer}
                 ref={videoRef}
-            />
+            /> */}
         </View>
     );
 };
@@ -69,9 +89,12 @@ export default VideoContainer;
 
 const styles = StyleSheet.create({
     container: {
-        elevation: 0.3,
         marginHorizontal: 5,
         marginBottom: 10,
+        borderRadius: 4,
+        borderWidth: 0.5,
+        padding: 0,
+        borderColor: colors.borderColor,
     },
     firstItemStyles: {
         marginTop: 10,
@@ -80,9 +103,15 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleStyle: {
-        fontSize: 25,
-        // paddingVertical: 10,
-        marginLeft: 10,
-        color: '#001',
+        marginVertical: 10,
+        marginHorizontal: 5,
+    },
+    imageWrapperWidget: {
+        height: 360,
+    },
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'fill',
     },
 });
