@@ -1,10 +1,11 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {getYoutubeMeta} from 'react-native-youtube-iframe';
 import {getVideoId} from '../../../utils/ReusableMethod';
 // import {useTheme} from '@react-navigation/native';
 import commonStyles from '../../../styles/commonStyles';
 import colors from '../../../theme/colors';
+import VideoPlayButton from '../../../component/atoms/VideoPlayButton';
 
 interface Props {
     item: any;
@@ -61,18 +62,26 @@ const VideoContainer = ({item, index}: Props) => {
                     {item?.name}
                 </Text>
             </View>
-            <View style={styles.imageWrapperWidget}>
-                {/* @ts-ignore */}
-                {metaDataOfVideo?.thumbnail_url && (
-                    <Image
-                        source={{
-                            // @ts-ignore
-                            uri: metaDataOfVideo?.thumbnail_url,
-                        }}
-                        style={styles.imageContainer}
-                    />
-                )}
-            </View>
+            <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.imageWrapperWidget}>
+                <View
+                    style={[styles.boxWrapper, commonStyles.pageContentCenter]}>
+                    {/* @ts-ignore */}
+                    {metaDataOfVideo?.thumbnail_url && (
+                        <Image
+                            source={{
+                                // @ts-ignore
+                                uri: metaDataOfVideo?.thumbnail_url,
+                            }}
+                            style={styles.imageContainer}
+                        />
+                    )}
+                    <View style={styles.playButtonWrapper}>
+                        <VideoPlayButton />
+                    </View>
+                </View>
+            </TouchableOpacity>
 
             {/* <YoutubePlayer
                 height={calculatePlayerHeight() - 5}
@@ -113,5 +122,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         objectFit: 'fill',
+    },
+    boxWrapper: {
+        position: 'relative',
+    },
+    playButtonWrapper: {
+        position: 'absolute',
     },
 });
