@@ -8,8 +8,9 @@ import colors from '../../../theme/colors';
 import VideoPlayButton from '../../../component/atoms/VideoPlayButton';
 
 interface Props {
-    item: any;
+    item: {link: string, name: string, id: string};
     index: number;
+    // callBackMethod: (id: string) => void;
 }
 
 const VideoContainer = ({item, index}: Props) => {
@@ -50,6 +51,16 @@ const VideoContainer = ({item, index}: Props) => {
         );
     }
 
+    /**
+     * description :- This method for each video item press
+     * @author {ALAMIN}
+     * @created_by :- {ALAMIN}
+     * @created_at :- 28/07/2023 11:34:48
+     */
+    const eachItemPress = () => {
+        // return callBackMethod(item.id);
+    };
+
     return (
         <View
             style={[
@@ -63,7 +74,8 @@ const VideoContainer = ({item, index}: Props) => {
                 </Text>
             </View>
             <TouchableOpacity
-                activeOpacity={0.8}
+                activeOpacity={0.9}
+                onPress={eachItemPress}
                 style={styles.imageWrapperWidget}>
                 <View
                     style={[styles.boxWrapper, commonStyles.pageContentCenter]}>

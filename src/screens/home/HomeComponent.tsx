@@ -30,13 +30,13 @@ const HomeComponent = () => {
         try {
             const res = await axios.get(API_URL);
             setData(res?.data || []);
+
+            setLoading(false);
         } catch (error) {
-            setData([]);
+            // setData([]);
             if (__DEV__) {
                 console.log(error, 'from catch errors');
             }
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -47,7 +47,6 @@ const HomeComponent = () => {
             </View>
         );
     }
-
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -68,5 +67,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // marginTop: StatusBar.currentHeight || 0,
+    },
+    contentContainer: {
+        backgroundColor: 'white',
+    },
+    itemContainer: {
+        padding: 6,
+        margin: 6,
+        backgroundColor: '#eee',
     },
 });
