@@ -7,8 +7,13 @@ import VideoContainer from './homeComponent/VideoContainer';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CategoriesList from './homeComponent/CategoriesList';
 import commonStyles from '../../styles/commonStyles';
+import {storeRootData} from '../../store/slice/homeSlice';
+import {useAppDispatch} from '../../store/storeHook';
 
 const HomeComponent = () => {
+    // define dispatch
+    const dispatch = useAppDispatch();
+
     const [data, setData] = useState<any>([]);
     const [loading, setLoading] = useState<Boolean>(true);
 
@@ -18,6 +23,7 @@ const HomeComponent = () => {
             // made api request
             getListOfContent();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /**
@@ -30,6 +36,9 @@ const HomeComponent = () => {
         try {
             const res = await axios.get(API_URL);
             setData(res?.data || []);
+
+            // store data into redux-store, to re-usable of it
+            dispatch(storeRootData(res?.data));
 
             setLoading(false);
         } catch (error) {
@@ -66,14 +75,5 @@ export default HomeComponent;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // marginTop: StatusBar.currentHeight || 0,
-    },
-    contentContainer: {
-        backgroundColor: 'white',
-    },
-    itemContainer: {
-        padding: 6,
-        margin: 6,
-        backgroundColor: '#eee',
     },
 });

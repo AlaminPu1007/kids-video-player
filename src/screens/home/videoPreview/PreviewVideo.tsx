@@ -1,10 +1,14 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text, FlatList} from 'react-native';
 import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../navigation/stackNavigation/RootStackNav';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {calculatePlayerHeight, getVideoId} from '../../../utils/ReusableMethod';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import {useAppSelector} from '../../../store/storeHook';
+import commonStyles from '../../../styles/commonStyles';
+import colors from '../../../theme/colors';
+import RenderVideoList from './previewComponent/RenderVideoList';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'videoPreview'>;
 
@@ -15,8 +19,14 @@ interface routerParams {
 }
 
 const PreviewVideo = ({route}: Props) => {
-    const [playing, setPlaying] = useState<boolean>(false);
+    // get video data from redux
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {rootData = []} = useAppSelector(state => state.home);
+
+    const [playing, setPlaying] = useState<boolean>(true);
     const [videoId, setVideoId] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
     const videoRef = useRef(null);
 
     /**
@@ -33,10 +43,18 @@ const PreviewVideo = ({route}: Props) => {
             const getId = getVideoId(videoUrl);
             setVideoId(getId);
         }
+        const timeOut = setTimeout(() => {
+            setLoading(false);
+        }, 500);
+        return () => {
+            clearInterval(timeOut);
+        };
     }, [route]);
 
     const onStateChange = useCallback((state: string) => {
-        console.log(state, 'state');
+        if (__DEV__) {
+            console.log(state, 'state');
+        }
 
         if (state === 'ended') {
             setPlaying(false);
@@ -47,9 +65,18 @@ const PreviewVideo = ({route}: Props) => {
     //     setPlaying(prev => !prev);
     // }, []);
 
+    // initial  loader
+    if (loading) {
+        return (
+            <View style={[commonStyles.pageContentCenter]}>
+                <Text style={[commonStyles.mediumTextStyles]}>loading...</Text>
+            </View>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <View>
+            <View style={styles.videoContainer}>
                 {videoId ? (
                     <YoutubePlayer
                         height={calculatePlayerHeight()}
@@ -61,6 +88,18 @@ const PreviewVideo = ({route}: Props) => {
                     />
                 ) : null}
             </View>
+            {/* Video item will be render here */}
+            {rootData?.length ? (
+                <FlatList
+                    data={rootData}
+                    // @ts-ignore
+                    keyExtractor={item => item.id}
+                    renderItem={({item, index}) => (
+                        // @ts-ignore
+                        <RenderVideoList Item={item} index={index} />
+                    )}
+                />
+            ) : null}
         </SafeAreaView>
     );
 };
@@ -70,6 +109,12 @@ export default PreviewVideo;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: colors.backgroundColor,
+    },
+    videoContainer: {
+        // marginBottom: 10,
+        padding: 0,
+        borderColor: colors.borderColor,
     },
     webViewContainer: {
         flex: 1,

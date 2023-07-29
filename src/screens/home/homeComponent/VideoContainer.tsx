@@ -6,15 +6,11 @@ import {getVideoId} from '../../../utils/ReusableMethod';
 import commonStyles from '../../../styles/commonStyles';
 import colors from '../../../theme/colors';
 import VideoPlayButton from '../../../component/atoms/VideoPlayButton';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../../navigation/stackNavigation/RootStackNav';
 import {navigationRef} from '../../../navigation/RootNavigation';
 
 interface Props {
     item: {link: string, name: string, id: string};
     index: number;
-    navigation: NativeStackScreenProps<RootStackParamList, 'videoPreview'>;
-    route: NativeStackScreenProps<RootStackParamList, 'videoPreview'>;
 }
 
 const VideoContainer = ({item, index}: Props) => {
