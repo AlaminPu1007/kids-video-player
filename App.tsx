@@ -21,12 +21,14 @@ import {
 } from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import {store} from './src/store/index';
+import {navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
     const scheme = useColorScheme();
     return (
         <SafeAreaProvider>
             <NavigationContainer
+                ref={navigationRef}
                 theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
                 <RootStackNav />
             </NavigationContainer>

@@ -6,11 +6,15 @@ import {getVideoId} from '../../../utils/ReusableMethod';
 import commonStyles from '../../../styles/commonStyles';
 import colors from '../../../theme/colors';
 import VideoPlayButton from '../../../component/atoms/VideoPlayButton';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../navigation/stackNavigation/RootStackNav';
+import {navigationRef} from '../../../navigation/RootNavigation';
 
 interface Props {
     item: {link: string, name: string, id: string};
     index: number;
-    // callBackMethod: (id: string) => void;
+    navigation: NativeStackScreenProps<RootStackParamList, 'videoPreview'>;
+    route: NativeStackScreenProps<RootStackParamList, 'videoPreview'>;
 }
 
 const VideoContainer = ({item, index}: Props) => {
@@ -58,7 +62,11 @@ const VideoContainer = ({item, index}: Props) => {
      * @created_at :- 28/07/2023 11:34:48
      */
     const eachItemPress = () => {
-        // return callBackMethod(item.id);
+        // @ts-ignore
+        return navigationRef.navigate('videoPreview', {
+            itemId: item.id,
+            videoUrl: item.link,
+        });
     };
 
     return (
