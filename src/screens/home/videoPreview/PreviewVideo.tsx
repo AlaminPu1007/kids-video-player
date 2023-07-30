@@ -21,11 +21,12 @@ interface routerParams {
 const PreviewVideo = ({route}: Props) => {
     // get video data from redux
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {rootData = []} = useAppSelector(state => state.home);
 
     const [playing, setPlaying] = useState<boolean>(true);
     const [videoId, setVideoId] = useState<string>('');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [loading, setLoading] = useState<boolean>(true);
     const videoRef = useRef(null);
 
@@ -43,12 +44,12 @@ const PreviewVideo = ({route}: Props) => {
             const getId = getVideoId(videoUrl);
             setVideoId(getId);
         }
-        const timeOut = setTimeout(() => {
-            setLoading(false);
-        }, 500);
-        return () => {
-            clearInterval(timeOut);
-        };
+        // const timeOut = setTimeout(() => {
+        //     setLoading(false);
+        // }, 500);
+        // return () => {
+        //     clearInterval(timeOut);
+        // };
     }, [route]);
 
     const onStateChange = useCallback((state: string) => {
@@ -56,23 +57,38 @@ const PreviewVideo = ({route}: Props) => {
             console.log(state, 'state');
         }
 
+        if (state === 'unstarted') {
+            setLoading(false);
+        }
+
         if (state === 'ended') {
             setPlaying(false);
         }
     }, []);
+
+    /**
+     * description :- This method for get video link from callback
+     * @author {ALAMIN}
+     * @created_by :- {ALAMIN}
+     * @created_at :- 30/07/2023 20:41:46
+     */
+    const getUserSelectAbleVideo = (link: string) => {
+        const getId = getVideoId(link);
+        setVideoId(getId);
+    };
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying(prev => !prev);
     // }, []);
 
     // initial  loader
-    if (loading) {
-        return (
-            <View style={[commonStyles.pageContentCenter]}>
-                <Text style={[commonStyles.mediumTextStyles]}>loading...</Text>
-            </View>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <View style={[commonStyles.pageContentCenter]}>
+    //             <Text style={[commonStyles.mediumTextStyles]}>loading...</Text>
+    //         </View>
+    //     );
+    // }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -86,7 +102,17 @@ const PreviewVideo = ({route}: Props) => {
                         ref={videoRef}
                         onChangeState={onStateChange}
                     />
-                ) : null}
+                ) : (
+                    <View style={[commonStyles.pageContentCenter]}>
+                        <Text
+                            style={[
+                                commonStyles.mediumTextStyles,
+                                styles.noVideoFoundTxt,
+                            ]}>
+                            Video is not available
+                        </Text>
+                    </View>
+                )}
             </View>
             {/* Video item will be render here */}
             {rootData?.length ? (
@@ -94,9 +120,14 @@ const PreviewVideo = ({route}: Props) => {
                     data={rootData}
                     // @ts-ignore
                     keyExtractor={item => item.id}
+                    showsHorizontalScrollIndicator={false}
                     renderItem={({item, index}) => (
-                        // @ts-ignore
-                        <RenderVideoList Item={item} index={index} />
+                        <RenderVideoList
+                            // @ts-ignore
+                            Item={item}
+                            index={index}
+                            callBackToGetId={getUserSelectAbleVideo}
+                        />
                     )}
                 />
             ) : null}
@@ -109,12 +140,15 @@ export default PreviewVideo;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.backgroundColor,
+        backgroundColor: colors.white,
     },
     videoContainer: {
-        // marginBottom: 10,
         padding: 0,
         borderColor: colors.borderColor,
+        minHeight: calculatePlayerHeight(),
+    },
+    noVideoFoundTxt: {
+        textAlign: 'center',
     },
     webViewContainer: {
         flex: 1,

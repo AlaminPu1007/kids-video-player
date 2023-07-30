@@ -60,6 +60,7 @@ const HomeComponent = () => {
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={data}
+                showsHorizontalScrollIndicator={false}
                 ListHeaderComponent={<CategoriesList data={data} />}
                 renderItem={({item, index}) => (
                     <VideoContainer item={item} index={index} />

@@ -9,7 +9,7 @@ const colors = {
     borderColor: '#D4D4D4',
     backgroundColor: '#E4E4E4',
     progressGrey: '#C1C1C1',
-    while: '#FFFFFF',
+    white: '#FFFFFF',
     black: '#000000',
     gray: '#F9F9F9',
 };
