@@ -5,9 +5,10 @@ import {getYoutubeMeta} from 'react-native-youtube-iframe';
 import commonStyles from '../../../../styles/commonStyles';
 import colors from '../../../../theme/colors';
 import {useAppSelector} from '../../../../store/storeHook';
+import VideoLoadingSkeleton from '../../../../component/atoms/VideoLoadingSkeleton';
 
 interface Props {
-    Item: {link: string, name: string, id: string, type: string};
+    Item: {link: string; name: string; id: string; type: string};
     index: number;
     callBackToGetId: (link: string) => void;
 }
@@ -46,6 +47,8 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
         // @ts-ignore
         return callBackToGetId(link);
     };
+
+    return <VideoLoadingSkeleton />;
 
     return (
         <View style={styles.container}>

@@ -12,6 +12,7 @@ const colors = {
     white: '#FFFFFF',
     black: '#000000',
     gray: '#F9F9F9',
+    skeletonBg: '#999',
 };
 
 export default colors;

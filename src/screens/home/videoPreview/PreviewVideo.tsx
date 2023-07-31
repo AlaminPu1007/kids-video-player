@@ -25,9 +25,8 @@ const PreviewVideo = ({route}: Props) => {
 
     const [playing, setPlaying] = useState<boolean>(true);
     const [videoId, setVideoId] = useState<string>('');
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [loading, setLoading] = useState<boolean>(true);
+
     const videoRef = useRef(null);
 
     /**
@@ -44,19 +43,16 @@ const PreviewVideo = ({route}: Props) => {
             const getId = getVideoId(videoUrl);
             setVideoId(getId);
         }
-        // const timeOut = setTimeout(() => {
-        //     setLoading(false);
-        // }, 500);
-        // return () => {
-        //     clearInterval(timeOut);
-        // };
+        const timeOut = setTimeout(() => {
+            setLoading(false);
+        }, 500);
+        return () => {
+            clearInterval(timeOut);
+        };
     }, [route]);
 
     const onStateChange = useCallback((state: string) => {
-        if (__DEV__) {
-            console.log(state, 'state');
-        }
-
+        // loader will be false after video loaded
         if (state === 'unstarted') {
             setLoading(false);
         }
@@ -72,36 +68,51 @@ const PreviewVideo = ({route}: Props) => {
      * @created_by :- {ALAMIN}
      * @created_at :- 30/07/2023 20:41:46
      */
-    const getUserSelectAbleVideo = (link: string) => {
-        const getId = getVideoId(link);
-        setVideoId(getId);
+    const getUserSelectAbleVideo = async (link: string) => {
+        try {
+            setLoading(prv => !prv);
+            const getId = getVideoId(link);
+            setVideoId(getId);
+            //stop loader
+            setLoading(prv => !prv);
+        } catch (err) {
+            setLoading(prv => !prv);
+            if (__DEV__) {
+                console.log(err);
+            }
+        }
     };
 
-    // const togglePlaying = useCallback(() => {
-    //     setPlaying(prev => !prev);
-    // }, []);
-
-    // initial  loader
-    // if (loading) {
-    //     return (
-    //         <View style={[commonStyles.pageContentCenter]}>
-    //             <Text style={[commonStyles.mediumTextStyles]}>loading...</Text>
-    //         </View>
-    //     );
-    // }
+    // This method will called after video loaded successfully
+    const onVideoReadyMethod = () => {
+        setLoading(false);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.videoContainer}>
-                {videoId ? (
-                    <YoutubePlayer
-                        height={calculatePlayerHeight()}
-                        play={playing}
-                        videoId={videoId}
-                        webViewStyle={styles.webViewContainer}
-                        ref={videoRef}
-                        onChangeState={onStateChange}
-                    />
+                {!loading ? (
+                    videoId ? (
+                        <YoutubePlayer
+                            height={calculatePlayerHeight()}
+                            play={playing}
+                            videoId={videoId}
+                            webViewStyle={styles.webViewContainer}
+                            ref={videoRef}
+                            onReady={onVideoReadyMethod}
+                            onChangeState={onStateChange}
+                        />
+                    ) : (
+                        <View style={[commonStyles.pageContentCenter]}>
+                            <Text
+                                style={[
+                                    commonStyles.mediumTextStyles,
+                                    styles.noVideoFoundTxt,
+                                ]}>
+                                Video is not available
+                            </Text>
+                        </View>
+                    )
                 ) : (
                     <View style={[commonStyles.pageContentCenter]}>
                         <Text
@@ -109,7 +120,7 @@ const PreviewVideo = ({route}: Props) => {
                                 commonStyles.mediumTextStyles,
                                 styles.noVideoFoundTxt,
                             ]}>
-                            Video is not available
+                            loading...
                         </Text>
                     </View>
                 )}
