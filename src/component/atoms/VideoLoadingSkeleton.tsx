@@ -55,6 +55,5 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 120,
         backgroundColor: colors.skeletonBg,
-        marginVertical: 10,
     },
 });

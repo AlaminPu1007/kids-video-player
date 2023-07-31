@@ -5,10 +5,10 @@ import {getYoutubeMeta} from 'react-native-youtube-iframe';
 import commonStyles from '../../../../styles/commonStyles';
 import colors from '../../../../theme/colors';
 import {useAppSelector} from '../../../../store/storeHook';
-import VideoLoadingSkeleton from '../../../../component/atoms/VideoLoadingSkeleton';
+import VideoCardLoaderSkeleton from '../../../../component/molecules/VideoCardLoaderSkeleton';
 
 interface Props {
-    Item: {link: string; name: string; id: string; type: string};
+    Item: {link: string, name: string, id: string, type: string};
     index: number;
     callBackToGetId: (link: string) => void;
 }
@@ -26,6 +26,7 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
     // const [playing] = useState(false);
 
     const [metaDataOfVideo, setMetaDataOfVideo] = useState<Object>({});
+    const [imageLoader, setImageLoader] = useState<boolean>(true);
 
     // get meta data of video
     useEffect(() => {
@@ -48,7 +49,12 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
         return callBackToGetId(link);
     };
 
-    return <VideoLoadingSkeleton />;
+    // This method will help us to detect if image loaded successfully
+    const onLoadOfImage = () => {
+        if (imageLoader) {
+            setImageLoader(prv => !prv);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -59,33 +65,46 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
                         ? styles.lastItemStyles
                         : null,
                 ]}>
+                {imageLoader ? (
+                    <View style={styles.loaderContainer}>
+                        <VideoCardLoaderSkeleton />
+                    </View>
+                ) : null}
                 <TouchableOpacity
                     onPress={onItemPress}
                     activeOpacity={0.8}
-                    style={styles.imgContainer}>
-                    {/* @ts-ignore */}
-                    {metaDataOfVideo?.thumbnail_url ? (
-                        <Image
-                            source={{
-                                // @ts-ignore
-                                uri: metaDataOfVideo?.thumbnail_url,
-                            }}
-                            style={styles.thumbnailImageStyles}
-                        />
-                    ) : null}
+                    style={[
+                        styles.imgContainer,
+                        imageLoader ? styles.imgIsLoading : null,
+                    ]}>
+                    {
+                        // @ts-ignore
+                        metaDataOfVideo?.thumbnail_url ? (
+                            <Image
+                                source={{
+                                    // @ts-ignore
+                                    uri: metaDataOfVideo?.thumbnail_url,
+                                }}
+                                style={styles.thumbnailImageStyles}
+                                onLoad={onLoadOfImage}
+                            />
+                        ) : null
+                    }
                 </TouchableOpacity>
-                <View style={styles.textContainer}>
-                    <Text style={[commonStyles.mediumTextStyles]}>
-                        {Item?.name}
-                    </Text>
-                    <Text
-                        style={[
-                            commonStyles.smallTextStyles,
-                            styles.typeTextStyles,
-                        ]}>
-                        {Item.type}
-                    </Text>
-                </View>
+                {!imageLoader ? (
+                    <View style={styles.textContainer}>
+                        <Text style={[commonStyles.mediumTextStyles]}>
+                            {Item?.name}
+                        </Text>
+                        <Text
+                            style={[
+                                commonStyles.smallTextStyles,
+                                styles.typeTextStyles,
+                            ]}>
+                            {Item.type}
+                        </Text>
+                    </View>
+                ) : null}
             </View>
         </View>
     );
@@ -98,19 +117,25 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 12,
     },
+    loaderContainer: {flex: 1},
     itemContainer: {
         flexDirection: 'row',
         marginTop: 15,
-        borderWidth: 1,
+        borderWidth: 0.5,
         borderColor: colors.borderColor,
         borderRadius: 4,
     },
+
     lastItemStyles: {
         marginBottom: 15,
     },
     imgContainer: {
         width: 154,
         height: 88,
+    },
+    imgIsLoading: {
+        width: 0,
+        height: 0,
     },
     thumbnailImageStyles: {
         width: '100%',

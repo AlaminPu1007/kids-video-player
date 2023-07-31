@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, FlatList} from 'react-native';
+import {StyleSheet, View, Text, FlatList, Dimensions} from 'react-native';
 import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../navigation/stackNavigation/RootStackNav';
@@ -9,6 +9,9 @@ import {useAppSelector} from '../../../store/storeHook';
 import commonStyles from '../../../styles/commonStyles';
 import colors from '../../../theme/colors';
 import RenderVideoList from './previewComponent/RenderVideoList';
+import VideoLoadingSkeleton from '../../../component/atoms/VideoLoadingSkeleton';
+// get width from device window
+const WIDTH = Dimensions.get('window').width;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'videoPreview'>;
 
@@ -114,14 +117,15 @@ const PreviewVideo = ({route}: Props) => {
                         </View>
                     )
                 ) : (
-                    <View style={[commonStyles.pageContentCenter]}>
-                        <Text
-                            style={[
-                                commonStyles.mediumTextStyles,
-                                styles.noVideoFoundTxt,
-                            ]}>
-                            loading...
-                        </Text>
+                    <View
+                        style={[
+                            commonStyles.pageContentCenter,
+                            styles.webViewContainer,
+                        ]}>
+                        <VideoLoadingSkeleton
+                            Width={WIDTH}
+                            Height={calculatePlayerHeight()}
+                        />
                     </View>
                 )}
             </View>
