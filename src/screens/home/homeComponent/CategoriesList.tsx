@@ -1,5 +1,7 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import colors from '../../../theme/colors';
+import commonStyles from '../../../styles/commonStyles';
 
 interface Props {
     data: any;
@@ -45,10 +47,24 @@ const CategoriesList = ({data}: Props) => {
             <View style={styles.categoriesContainer}>
                 {categories?.length
                     ? // @ts-ignore
-                      categories.map(item => {
+                      categories.map((item, index) => {
+                          // get list item
+                          const isLastItem = categories?.length - 1 === index;
+
                           return (
-                              <View key={item?.name} style={styles.itemWidget}>
-                                  <Text>{item.name}</Text>
+                              <View
+                                  key={item?.name}
+                                  style={[
+                                      styles.itemWidget,
+                                      isLastItem ? styles.lastItemStyles : null,
+                                  ]}>
+                                  <Text
+                                      style={[
+                                          commonStyles.mediumTextStyles,
+                                          styles.itemTxtStyles,
+                                      ]}>
+                                      {item.name}
+                                  </Text>
                               </View>
                           );
                       })
@@ -69,14 +85,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemWidget: {
-        backgroundColor: '#ddd',
-        color: '#000',
-        fontSize: 22,
+        backgroundColor: colors.borderColor,
+        color: colors.black,
         marginLeft: 10,
-        borderRadius: 300,
+        borderRadius: 150,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 25,
         paddingVertical: 6,
+    },
+    itemTxtStyles: {
+        textTransform: 'capitalize',
+    },
+    lastItemStyles: {
+        marginRight: 10,
     },
 });
