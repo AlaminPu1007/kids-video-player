@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList, Text} from 'react-native';
 import axios from 'axios';
 //@ts-ignore
 import {API_URL} from '@env';
 import VideoContainer from './homeComponent/VideoContainer';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CategoriesList from './homeComponent/CategoriesList';
-import commonStyles from '../../styles/commonStyles';
+// import commonStyles from '../../styles/commonStyles';
 import {storeRootData} from '../../store/slice/homeSlice';
 import {useAppDispatch} from '../../store/storeHook';
+import HomeLoaderSkeleton from '../../component/molecules/HomeLoaderSkeleton';
+import commonStyles from '../../styles/commonStyles';
 
 const HomeComponent = () => {
     // define dispatch
@@ -51,22 +53,30 @@ const HomeComponent = () => {
 
     if (loading) {
         return (
-            <View style={[commonStyles.pageContentCenter]}>
-                <Text style={[commonStyles.mediumTextStyles]}>loading...</Text>
+            <View>
+                <HomeLoaderSkeleton />
             </View>
         );
     }
     return (
         <SafeAreaView style={styles.container}>
-            <FlatList
-                data={data}
-                showsHorizontalScrollIndicator={false}
-                ListHeaderComponent={<CategoriesList data={data} />}
-                renderItem={({item, index}) => (
-                    <VideoContainer item={item} index={index} />
-                )}
-                keyExtractor={item => item.id}
-            />
+            {data?.length ? (
+                <FlatList
+                    data={data}
+                    showsHorizontalScrollIndicator={false}
+                    ListHeaderComponent={<CategoriesList data={data} />}
+                    renderItem={({item, index}) => (
+                        <VideoContainer item={item} index={index} />
+                    )}
+                    keyExtractor={item => item.id}
+                />
+            ) : (
+                <View style={[commonStyles.pageContentCenter]}>
+                    <Text style={[commonStyles.mediumTextStyles]}>
+                        Content is not available
+                    </Text>
+                </View>
+            )}
         </SafeAreaView>
     );
 };
