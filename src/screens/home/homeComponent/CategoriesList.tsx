@@ -1,7 +1,14 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import colors from '../../../theme/colors';
 import commonStyles from '../../../styles/commonStyles';
+import {navigationRef} from '../../../navigation/RootNavigation';
 
 interface Props {
     data: any;
@@ -39,6 +46,18 @@ const CategoriesList = ({data}: Props) => {
         }
     };
 
+    /**
+     * description :- This method help us to get specific category wise video
+     * @created_by :- {ALAMIN}
+     * @created_at :- 05/08/2023 10:44:52
+     */
+    const itemOnPressMethod = (category: string) => {
+        // @ts-ignore
+        return navigationRef.navigate('categoryPreview', {
+            categoryName: category,
+        });
+    };
+
     return (
         <ScrollView
             horizontal={true}
@@ -52,7 +71,11 @@ const CategoriesList = ({data}: Props) => {
                           const isLastItem = categories?.length - 1 === index;
 
                           return (
-                              <View
+                              <TouchableOpacity
+                                  activeOpacity={0.8}
+                                  onPress={() => {
+                                      itemOnPressMethod(item.name);
+                                  }}
                                   key={item?.name}
                                   style={[
                                       styles.itemWidget,
@@ -65,7 +88,7 @@ const CategoriesList = ({data}: Props) => {
                                       ]}>
                                       {item.name}
                                   </Text>
-                              </View>
+                              </TouchableOpacity>
                           );
                       })
                     : null}
