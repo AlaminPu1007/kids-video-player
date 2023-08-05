@@ -26,7 +26,6 @@ export default VideoCardLoaderSkeleton;
 const styles = StyleSheet.create({
     itemContainer: {
         flexDirection: 'row',
-        marginTop: 15,
     },
     textContainer: {
         width: '100%',

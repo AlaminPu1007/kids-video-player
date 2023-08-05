@@ -44,6 +44,9 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
 
     // each item press method
     const onItemPress = () => {
+        if (imageLoader) {
+            return null;
+        }
         const {link} = Item;
         // @ts-ignore
         return callBackToGetId(link);
@@ -58,7 +61,9 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
 
     return (
         <View style={styles.container}>
-            <View
+            <TouchableOpacity
+                onPress={onItemPress}
+                activeOpacity={0.8}
                 style={[
                     styles.itemContainer,
                     rootData?.length - 1 === index
@@ -70,9 +75,9 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
                         <VideoCardLoaderSkeleton />
                     </View>
                 ) : null}
-                <TouchableOpacity
-                    onPress={onItemPress}
-                    activeOpacity={0.8}
+                <View
+                    // onPress={onItemPress}
+                    // activeOpacity={0.8}
                     style={[
                         styles.imgContainer,
                         imageLoader ? styles.imgIsLoading : null,
@@ -90,7 +95,7 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
                             />
                         ) : null
                     }
-                </TouchableOpacity>
+                </View>
                 {!imageLoader ? (
                     <View style={styles.textContainer}>
                         <Text style={[commonStyles.mediumTextStyles]}>
@@ -105,7 +110,7 @@ const RenderVideoList = ({Item, index, callBackToGetId}: Props) => {
                         </Text>
                     </View>
                 ) : null}
-            </View>
+            </TouchableOpacity>
         </View>
     );
 };
