@@ -42,9 +42,11 @@ const HomeComponent = () => {
             // store data into redux-store, to re-usable of it
             dispatch(storeRootData(res?.data));
 
-            setLoading(false);
+            setLoading(prv => !prv);
         } catch (error) {
             // setData([]);
+            setLoading(prv => !prv);
+
             if (__DEV__) {
                 console.log(error, 'from catch errors');
             }

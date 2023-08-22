@@ -11,7 +11,7 @@
 
 import {StyleSheet, useColorScheme} from 'react-native';
 import React from 'react';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+// import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import RootStackNav from './src/navigation/stackNavigation/RootStackNav';
 import {
@@ -26,7 +26,7 @@ import {navigationRef} from './src/navigation/RootNavigation';
 const App = () => {
     const scheme = useColorScheme();
     return (
-        <SafeAreaProvider>
+        <SafeAreaProvider style={styles.container}>
             <NavigationContainer
                 ref={navigationRef}
                 theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -38,11 +38,9 @@ const App = () => {
 
 export default () => {
     return (
-        <GestureHandlerRootView style={styles.container}>
-            <Provider store={store}>
-                <App />
-            </Provider>
-        </GestureHandlerRootView>
+        <Provider store={store}>
+            <App />
+        </Provider>
     );
 };
 
