@@ -28,7 +28,9 @@ export const generateUUID = () => {
     let d = new Date().getTime(); //Timestamp
     let d2 =
         (typeof performance !== 'undefined' &&
+            // eslint-disable-next-line no-undef
             performance.now &&
+            // eslint-disable-next-line no-undef
             performance.now() * 1000) ||
         0; //Time in microseconds since page-load or 0 if unsupported
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(

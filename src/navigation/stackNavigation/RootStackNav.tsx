@@ -5,9 +5,9 @@ import PreviewVideo from '../../screens/home/videoPreview';
 import CatagoriesWisePreview from '../../screens/home/preview-of-categories';
 
 export type RootStackParamList = {
-    Dashboard: undefined;
-    videoPreview: {itemId: string; videoUrl: string} | undefined;
-    categoryPreview: {categoryName: string} | undefined;
+    Dashboard: undefined,
+    videoPreview: {itemId: string, videoUrl: string} | undefined,
+    categoryPreview: {categoryName: string} | undefined,
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
