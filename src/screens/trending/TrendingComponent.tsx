@@ -11,5 +11,3 @@ const TrendingComponent = () => {
 };
 
 export default TrendingComponent;
-
-// const styles = StyleSheet.create({});
